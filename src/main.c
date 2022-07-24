@@ -19,7 +19,7 @@ void start_utilities(void *var);
 
 /**
  * FORMAT:
- * launch <all/name>
+ * launch
  */
 
 /**
@@ -32,11 +32,11 @@ void start_utilities(void *var);
 int main(int argc, char *argv[])
 {
     // check argument length
-    if (argc != 2)
+    if (argc != 1)
     {
         // create exception
         exception _exception = {
-            "Correct Usage: launch <all/name>",
+            "Correct Usage: launch",
             INCORRECT_USAGE
         };
 
@@ -45,46 +45,16 @@ int main(int argc, char *argv[])
         exit(0);
     }
 
-    // create argument & option variables
-    char *arg = (char*) argv[1];
-    int option;
+    // setup multithreading
+    pthread_t ccecon, ccutilities;
 
-    // set option
-    if (strstr(arg, "all")) option = 1;
-    else option = 2;
+    // create threads
+    pthread_create(&ccecon, NULL, (void*)(void*) start_econ, NULL);
+    pthread_create(&ccutilities, NULL, (void*)(void*) start_utilities, NULL);
 
-    // check if null
-    if (!option)
-    {
-        // create exception
-        exception _exception = {
-            "Correct Usage: launch <all/name>",
-            INCORRECT_USAGE
-        };
-
-        // throw exception
-        throw(&_exception);
-        exit(0);
-    }
-
-    // switch option
-    switch (option)
-    {
-        // all
-        case 1:
-            // setup multithreading
-            pthread_t ccecon, ccutilities;
-
-            // create threads
-            pthread_create(&ccecon, NULL, (void*)(void*) start_econ, NULL);
-            pthread_create(&ccutilities, NULL, (void*)(void*) start_utilities, NULL);
-
-            // join threads
-            pthread_join(ccecon, NULL);
-            pthread_join(ccutilities, NULL);
-
-            break;
-    }
+    // join threads
+    pthread_join(ccecon, NULL);
+    pthread_join(ccutilities, NULL);
     
     return 0;
 }
