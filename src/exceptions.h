@@ -3,7 +3,7 @@
 
 // exceptions
 enum exception_type {
-    INCORRECT_USAGE = 0
+    INCORRECT_USAGE
 };
 
 // public accessible
@@ -30,7 +30,7 @@ void to_string(char *var, exception_type type)
     switch (type)
     {
         // get messages
-        case 0: strcpy(var, "INCORRECT_USAGE_EXCEPTION"); break;
+        case INCORRECT_USAGE: strcpy(var, "INCORRECT_USAGE_EXCEPTION"); break;
     }
 }
 

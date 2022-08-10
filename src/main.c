@@ -4,23 +4,8 @@
 #include <unistd.h>
 #include <pthread.h>
 
-#include "bots.h"
-
-/**
- * C EXCEPTIONS LIBRARY
- * By Yochran
- */
-
 #include "exceptions.h"
-
-// threading function declarations
-void start_econ(void *var);
-void start_utilities(void *var);
-
-/**
- * FORMAT:
- * launch
- */
+#include "bots.h"
 
 /**
  * @brief Main function
@@ -48,43 +33,17 @@ int main(int argc, char *argv[])
     // setup multithreading
     pthread_t ccecon, ccutilities;
 
+    // get thread args
+    thread_args econ_args = { "ChristCentered-Economy" };
+    thread_args util_args = { "ccutilities" };
+
     // create threads
-    pthread_create(&ccecon, NULL, (void*)(void*) start_econ, NULL);
-    pthread_create(&ccutilities, NULL, (void*)(void*) start_utilities, NULL);
+    pthread_create(&ccecon, NULL, get_bot, &econ_args);
+    pthread_create(&ccutilities, NULL, get_bot, &util_args);
 
     // join threads
     pthread_join(ccecon, NULL);
     pthread_join(ccutilities, NULL);
     
     return 0;
-}
-
-/**
- * @brief Start CC Economy
- */
-void start_econ(void *var)
-{
-    // create bot struct
-    bot _bot = {
-        "/home/yochran/Documents/code/ChristCentered-Economy",
-        "index.js"
-    };
-
-    // start bot
-    start_bot(&_bot);
-}
-
-/**
- * @brief Start CC Utilities
- */
-void start_utilities(void *var)
-{
-    // create bot struct
-    bot _bot = {
-        "/home/yochran/Documents/code/ccutilities",
-        "index.js"
-    };
-
-    // start bot
-    start_bot(&_bot);
 }
